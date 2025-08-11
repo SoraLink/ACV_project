@@ -1,5 +1,6 @@
 import argparse
-import math
+
+import time
 
 import torch.nn
 import torchvision.datasets
@@ -66,11 +67,11 @@ def main():
 
     cfg = ViTConfig(
         image_size=32,          # CIFAR-10
-        patch_size=4,           # 32/4=8 → 序列长度 8*8+1=65
+        patch_size=4,           # 32/4=8 → 序列长度 8*8+1=65 # [2,4,8]
         num_channels=3,
-        hidden_size=256,        # d_model
-        num_hidden_layers=8,
-        num_attention_heads=4,  # 256/4=64 → head_dim
+        hidden_size=256,        # d_model [96,192,256]
+        num_hidden_layers=8,    #[4,6,12]
+        num_attention_heads=4,  # 256/4=64 → head_dim[1,3,8,96]
         intermediate_size=256*4,# MLP比例=4
         qkv_bias=True,
         hidden_act="gelu",
@@ -97,6 +98,8 @@ def main():
     loss_fn = torch.nn.CrossEntropyLoss()
 
     best_acc = 0.0
+    start_time = time.time()
+    print('Start training')
 
     for epoch in range(args.epochs):
         model.train()
@@ -139,6 +142,10 @@ def main():
             }, args.checkpoint_path)
 
     print(f"Training finished. Best val acc = {best_acc * 100:.2f}%")
+
+    end_time = time.time()
+    total_time = end_time - start_time
+    print("Total training time: %.4f s" % (total_time))
 
 
 if __name__ == '__main__':
