@@ -20,7 +20,7 @@ train_transform = T.Compose([
                 (0.2023, 0.1994, 0.2010)),  # CIFAR-10 统计均值和方差
 ])
 
-#zitao_test
+#zitao_test2
 # 测试集数据处理
 test_transform = T.Compose([
     T.ToTensor(),
