@@ -547,12 +547,15 @@ class ViTPooler(nn.Module):
         return pooled_output
 
 class ViT(nn.Module):
-    def __init__(self, vit_config, num_classes=10, **kwargs):
+    def __init__(self, num_classes=20, **kwargs):
         super(ViT, self).__init__()
+        model_name = 'google/vit-base-patch16-224'
+        pretrain_model = transformers.ViTModel.from_pretrained(model_name)
+        vit_config = ViTConfig.from_pretrained(model_name)
         self.base = ViTModel(vit_config)
+        self.base.load_state_dict(pretrain_model.state_dict())
         self.final = nn.Linear(self.base.config.hidden_size, num_classes)
         self.num_classes = num_classes
-        self.config = vit_config
 
     def forward(self, pixel_values):
         outputs = self.base(pixel_values=pixel_values)
