@@ -178,7 +178,7 @@ def main():
     total_time = end_time - start_time
     print(f"Training finished. Best val acc = {best_acc * 100:.2f}%")
     print(f"Total training time: {total_time:.2f} s")
-    print(f"[FLOPs] total training≈{clever_format([total_train_flops], '%.3f')[0]}")
+    print(f"[FLOPs] total training: {total_train_flops / 1e15:.3f} PFLOPs")
 
     epochs = list(range(1, args.epochs + 1))
 
